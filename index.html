@@ -72,8 +72,9 @@
 
         fetch(url, {
                 method: 'GET',
-                mode: "no-cors",
-				headers: headers
+headers: {
+    'Content-Type': 'application/json'
+  }
             })
             .then(response => response.json())
             .then((res) => {
@@ -82,8 +83,9 @@
 
                 // initial item id/index will be 0 (obviously no items before fetching) 
                 var id = 0;
-                var icon = currency(i.currency);
+                
 
+                var icon = currency(list[0]['currency']);
                 for (i of list) {
                     // since there is no database so no aut increment but we'll do manually.
                     id += 1;
