@@ -1,0 +1,171 @@
+<!-- Created by (abhi) @abhiprojectz in Vanilla JS + Plain CSS3 -->
+<!-- 	P.S: Created for UXGorilla internship task by abhi @abhiprojectz
+	to make the code more readable/understandable functions or variable names are chosen -->
+<!DOCTYPE html>
+<html>
+<head>
+	<title>UXGorilla Frontend task by abhi</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+	<div id="main">
+		<!-- header starts here.  -->
+	<div class="header">
+		<span>Home</span>
+		<span><span class="active">Products</span></span>
+		<span>About</span>
+		<span>Contact</span>
+	</div>
+
+	<div class="container">
+		<!-- main heading  -->
+	<h1>Products</h1>
+	<p style="opacity: 0.7;">Available products are listed below</p>
+
+
+	<!-- product table -->
+<table>
+	<thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Location</th>
+      </tr>
+  </thead>
+  <tbody id="detail">
+ <!-- The place where all the products will be visible! -->
+  </tbody>
+</table>
+	</div>
+</div>
+	
+	<!-- The product layout -->
+<div id="product"></div>
+
+
+</body>
+<script type="text/javascript">
+	var curr = [{
+            "USD": "$"
+        }, {
+            "INR": "Rs."
+        }]
+	window.onload = () => {
+
+    let params = new URLSearchParams(window.location.search.substring(1));
+    let n = params.get("pro");
+
+
+    // This function checks whether the url/route contains some product name or not
+    if (n) {
+        document.querySelector("#main").style.display = "none";
+        var prd = document.querySelector("#product");
+        prd.style.display = "block";
+        productload(n)
+    } else {
+
+
+        // if there is no product param in url this loads the main page.
+        document.querySelector("#main").style.display = "block";
+        var url = "api.json";
+
+        fetch(url, {
+                method: 'GET',
+                mode: "no-cors",
+				headers: headers
+            })
+            .then(response => response.json())
+            .then((res) => {
+                var list = res.data;
+                var elem = document.querySelector('#detail');
+
+                // initial item id/index will be 0 (obviously no items before fetching) 
+                var id = 0;
+                var icon = currency(i.currency);
+
+                for (i of list) {
+                    // since there is no database so no aut increment but we'll do manually.
+                    id += 1;
+
+                    // the items template
+                    var items = `
+			<tr id="${i.name}">
+		<td>${id}</td>
+      	<td>${i.name}</td>
+        <td>${icon}${i.price}</td>
+        <td>${i.location}</td>
+      </tr>
+			`;
+                    elem.innerHTML += items;
+                }
+
+
+                // the part which make rows functional 
+                var tr = document.querySelectorAll("tr");
+                tr.forEach(function(el) {
+                    el.onclick = function() {
+                        var n = this.id;
+                        window.location.href = window.location.href + "?pro=" + n;
+                        proload(n)
+                    }
+                })
+            })
+            .catch(err => console.log(err))
+    }
+}
+
+
+
+// the function to handle product layout
+function productload(n) {
+    document.querySelector("#main").style.display = "none";
+    var prd = document.querySelector("#product");
+    prd.style.display = "block";
+
+
+    var url = "api.json";
+    fetch(url, {
+            method: 'GET',
+
+  headers: {
+    'Content-Type': 'application/json'
+  }
+        })
+        .then(response => response.json())
+        .then((res) => {
+
+            // var list = res.data;
+            // console.log(list)
+            // var elem = document.querySelector('#detail');
+
+            
+            var list = res.data.find(({
+                name
+            }) => name == n);
+
+            var icon = currency(list.currency);
+            prd.innerHTML = `
+		<h1>${list.name}</h1>
+		<p>${list.location}</p>
+		<button>Price  ${icon}${list.price}</button>
+		`;
+        })
+        .catch(err => console.log(err))
+
+}
+
+
+// simple function to get the currency icon from api
+function currency(a) {
+	var tz;
+for (i in curr) {
+	var z = curr[i][a];
+	if (z != undefined) {
+		tz = z;
+	}
+}
+return tz
+}
+</script>
+</html>

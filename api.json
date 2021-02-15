@@ -1,0 +1,26 @@
+{
+    "result": true,
+    "start": 0,
+    "limit": 10,
+    "count": 3,
+    "data": [
+        {
+            "name": "Pizza",
+            "price": "2.50",
+            "currency": "USD",
+            "location": "Refrigerated food"
+        },
+        {
+            "name": "Crisps",
+            "price": "3",
+            "currency": "USD",
+            "location": "the Snack isle"
+        },
+        {
+            "name": "Chocolate",
+            "price": "1.50",
+            "currency": "USD",
+            "location": "the Snack isle"
+        }
+    ]
+}
